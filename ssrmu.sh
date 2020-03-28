@@ -27,13 +27,13 @@ BBR_file="${file}/bbr.sh"
 jq_file="${ssr_folder}/jq"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
-Info="${Green_font_prefix}[信息]${Font_color_suffix}"
-Error="${Red_font_prefix}[错误]${Font_color_suffix}"
-Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
+Info="${Green_font_prefix}[INFO]${Font_color_suffix}"
+Error="${Red_font_prefix}[ERRR]${Font_color_suffix}"
+Tip="${Green_font_prefix}[WARN]${Font_color_suffix}"
 Separator_1="——————————————————————————————"
 
 check_root(){
-	[[ $EUID != 0 ]] && echo -e "${Error} 当前账号非ROOT(或没有ROOT权限)，无法继续操作，请使用${Green_background_prefix} sudo su ${Font_color_suffix}来获取临时ROOT权限（执行后会提示输入当前账号的密码）。" && exit 1
+	[[ $EUID != 0 ]] && echo -e "${Error} Current user is not root当前账号非ROOT(或没有ROOT权限)，无法继续操作，请使用${Green_background_prefix} sudo su ${Font_color_suffix}来获取临时ROOT权限（执行后会提示输入当前账号的密码）。" && exit 1
 }
 check_sys(){
 	if [[ -f /etc/redhat-release ]]; then
@@ -57,7 +57,7 @@ check_pid(){
 	PID=`ps -ef |grep -v grep | grep server.py |awk '{print $2}'`
 }
 check_crontab(){
-	[[ ! -e "/usr/bin/crontab" ]] && echo -e "${Error} 缺少依赖 Crontab ，请尝试手动安装 CentOS: yum install crond -y , Debian/Ubuntu: apt-get install cron -y !" && exit 1
+	[[ ! -e "/usr/bin/crontab" ]] && echo -e "${Error} 缺少依赖 Crontab missing，请尝试手动安装 please install CentOS: yum install crond -y , Debian/Ubuntu: apt-get install cron -y !" && exit 1
 }
 SSR_installation_status(){
 	[[ ! -e ${ssr_folder} ]] && echo -e "${Error} 没有发现 ShadowsocksR 文件夹，请检查 !" && exit 1
@@ -330,16 +330,16 @@ View_User(){
 	List_port_user
 	while true
 	do
-		echo -e "请输入要查看账号信息的用户 端口"
+		echo -e "请输入要查看账号信息的用户 端口 please input user port"
 		read -e -p "(默认: 取消):" View_user_port
-		[[ -z "${View_user_port}" ]] && echo -e "已取消..." && exit 1
+		[[ -z "${View_user_port}" ]] && echo -e "已取消cancelled..." && exit 1
 		View_user=$(cat "${config_user_mudb_file}"|grep '"port": '"${View_user_port}"',')
 		if [[ ! -z ${View_user} ]]; then
 			Get_User_info "${View_user_port}"
 			View_User_info
 			break
 		else
-			echo -e "${Error} 请输入正确的端口 !"
+			echo -e "${Error} 请输入正确的端口wrong port !"
 		fi
 	done
 }
@@ -348,21 +348,21 @@ View_User_info(){
 	[[ -z "${ip}" ]] && Get_IP
 	ss_ssr_determine
 	clear && echo "===================================================" && echo
-	echo -e " 用户 [${user_name}] 的配置信息：" && echo
+	echo -e " 用户 user [${user_name}] 的配置信息：" && echo
 	echo -e " I  P\t    : ${Green_font_prefix}${ip}${Font_color_suffix}"
-	echo -e " 端口\t    : ${Green_font_prefix}${port}${Font_color_suffix}"
-	echo -e " 密码\t    : ${Green_font_prefix}${password}${Font_color_suffix}"
-	echo -e " 加密\t    : ${Green_font_prefix}${method}${Font_color_suffix}"
-	echo -e " 协议\t    : ${Red_font_prefix}${protocol}${Font_color_suffix}"
-	echo -e " 混淆\t    : ${Red_font_prefix}${obfs}${Font_color_suffix}"
-	echo -e " 设备数限制 : ${Green_font_prefix}${protocol_param}${Font_color_suffix}"
-	echo -e " 单线程限速 : ${Green_font_prefix}${speed_limit_per_con} KB/S${Font_color_suffix}"
-	echo -e " 用户总限速 : ${Green_font_prefix}${speed_limit_per_user} KB/S${Font_color_suffix}"
-	echo -e " 禁止的端口 : ${Green_font_prefix}${forbidden_port} ${Font_color_suffix}"
+	echo -e " Port\t    : ${Green_font_prefix}${port}${Font_color_suffix}"
+	echo -e " Password\t    : ${Green_font_prefix}${password}${Font_color_suffix}"
+	echo -e " Encrypt\t    : ${Green_font_prefix}${method}${Font_color_suffix}"
+	echo -e " Protical\t    : ${Red_font_prefix}${protocol}${Font_color_suffix}"
+	echo -e " mix\t    : ${Red_font_prefix}${obfs}${Font_color_suffix}"
+	echo -e " device limit : ${Green_font_prefix}${protocol_param}${Font_color_suffix}"
+	echo -e " thread limit : ${Green_font_prefix}${speed_limit_per_con} KB/S${Font_color_suffix}"
+	echo -e " user limit : ${Green_font_prefix}${speed_limit_per_user} KB/S${Font_color_suffix}"
+	echo -e " band port : ${Green_font_prefix}${forbidden_port} ${Font_color_suffix}"
 	echo
-	echo -e " 已使用流量 : 上传: ${Green_font_prefix}${u}${Font_color_suffix} + 下载: ${Green_font_prefix}${d}${Font_color_suffix} = ${Green_font_prefix}${transfer_enable_Used_2}${Font_color_suffix}"
-	echo -e " 剩余的流量 : ${Green_font_prefix}${transfer_enable_Used} ${Font_color_suffix}"
-	echo -e " 用户总流量 : ${Green_font_prefix}${transfer_enable} ${Font_color_suffix}"
+	echo -e " used : 上传: ${Green_font_prefix}${u}${Font_color_suffix} + 下载: ${Green_font_prefix}${d}${Font_color_suffix} = ${Green_font_prefix}${transfer_enable_Used_2}${Font_color_suffix}"
+	echo -e " left : ${Green_font_prefix}${transfer_enable_Used} ${Font_color_suffix}"
+	echo -e " total : ${Green_font_prefix}${transfer_enable} ${Font_color_suffix}"
 	echo -e "${ss_link}"
 	echo -e "${ssr_link}"
 	echo -e " ${Green_font_prefix} 提示: ${Font_color_suffix}
@@ -428,7 +428,7 @@ Set_config_method(){
  ${Green_font_prefix}14.${Font_color_suffix} salsa20
  ${Green_font_prefix}15.${Font_color_suffix} chacha20
  ${Green_font_prefix}16.${Font_color_suffix} chacha20-ietf
- ${Tip} salsa20/chacha20-*系列加密方式，需要额外安装依赖 libsodium ，否则会无法启动ShadowsocksR !" && echo
+ ${Tip} salsa20/chacha20-* encrypt need libsodium ，否则会无法启动ShadowsocksR !" && echo
 	read -e -p "(默认: 5. aes-128-ctr):" ssr_method
 	[[ -z "${ssr_method}" ]] && ssr_method="5"
 	if [[ ${ssr_method} == "1" ]]; then
@@ -466,10 +466,10 @@ Set_config_method(){
 	else
 		ssr_method="aes-128-ctr"
 	fi
-	echo && echo ${Separator_1} && echo -e "	加密 : ${Green_font_prefix}${ssr_method}${Font_color_suffix}" && echo ${Separator_1} && echo
+	echo && echo ${Separator_1} && echo -e "	Encrypt : ${Green_font_prefix}${ssr_method}${Font_color_suffix}" && echo ${Separator_1} && echo
 }
 Set_config_protocol(){
-	echo -e "请选择要设置的用户 协议插件
+	echo -e "请选择要设置的用户 协议插件please select user protocal and plugin
 	
  ${Green_font_prefix}1.${Font_color_suffix} origin
  ${Green_font_prefix}2.${Font_color_suffix} auth_sha1_v4
@@ -1804,27 +1804,27 @@ else
 	echo -e "  ShadowsocksR MuJSON一键管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
   ---- Toyo | doub.io/ss-jc60 ----
 
-  ${Green_font_prefix}1.${Font_color_suffix} 安装 ShadowsocksR
-  ${Green_font_prefix}2.${Font_color_suffix} 更新 ShadowsocksR
-  ${Green_font_prefix}3.${Font_color_suffix} 卸载 ShadowsocksR
-  ${Green_font_prefix}4.${Font_color_suffix} 安装 libsodium(chacha20)
+  ${Green_font_prefix}1.${Font_color_suffix} install ShadowsocksR
+  ${Green_font_prefix}2.${Font_color_suffix} update ShadowsocksR
+  ${Green_font_prefix}3.${Font_color_suffix} uninstall ShadowsocksR
+  ${Green_font_prefix}4.${Font_color_suffix} install libsodium(chacha20)
 ————————————
-  ${Green_font_prefix}5.${Font_color_suffix} 查看 账号信息
-  ${Green_font_prefix}6.${Font_color_suffix} 显示 连接信息
-  ${Green_font_prefix}7.${Font_color_suffix} 设置 用户配置
-  ${Green_font_prefix}8.${Font_color_suffix} 手动 修改配置
-  ${Green_font_prefix}9.${Font_color_suffix} 配置 流量清零
+  ${Green_font_prefix}5.${Font_color_suffix} view account info
+  ${Green_font_prefix}6.${Font_color_suffix} display connections
+  ${Green_font_prefix}7.${Font_color_suffix} set user config
+  ${Green_font_prefix}8.${Font_color_suffix} manual change config
+  ${Green_font_prefix}9.${Font_color_suffix} config clean limit
 ————————————
- ${Green_font_prefix}10.${Font_color_suffix} 启动 ShadowsocksR
- ${Green_font_prefix}11.${Font_color_suffix} 停止 ShadowsocksR
- ${Green_font_prefix}12.${Font_color_suffix} 重启 ShadowsocksR
- ${Green_font_prefix}13.${Font_color_suffix} 查看 ShadowsocksR 日志
+ ${Green_font_prefix}10.${Font_color_suffix} start ShadowsocksR
+ ${Green_font_prefix}11.${Font_color_suffix} stop ShadowsocksR
+ ${Green_font_prefix}12.${Font_color_suffix} restart ShadowsocksR
+ ${Green_font_prefix}13.${Font_color_suffix} view ShadowsocksR log
 ————————————
- ${Green_font_prefix}14.${Font_color_suffix} 其他功能
- ${Green_font_prefix}15.${Font_color_suffix} 升级脚本
+ ${Green_font_prefix}14.${Font_color_suffix} other
+ ${Green_font_prefix}15.${Font_color_suffix} upgrade
  "
 	menu_status
-	echo && read -e -p "请输入数字 [1-15]：" num
+	echo && read -e -p "please input [1-15]：" num
 case "$num" in
 	1)
 	Install_SSR
@@ -1872,7 +1872,7 @@ case "$num" in
 	Update_Shell
 	;;
 	*)
-	echo -e "${Error} 请输入正确的数字 [1-15]"
+	echo -e "${Error} wrong number [1-15]"
 	;;
 esac
 fi
