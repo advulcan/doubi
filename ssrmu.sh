@@ -351,9 +351,9 @@ View_User_info(){
 	echo -e " 用户 user [${user_name}] 的配置信息：" && echo
 	echo -e " I  P\t    : ${Green_font_prefix}${ip}${Font_color_suffix}"
 	echo -e " Port\t    : ${Green_font_prefix}${port}${Font_color_suffix}"
-	echo -e " Password\t    : ${Green_font_prefix}${password}${Font_color_suffix}"
-	echo -e " Encrypt\t    : ${Green_font_prefix}${method}${Font_color_suffix}"
-	echo -e " Protical\t    : ${Red_font_prefix}${protocol}${Font_color_suffix}"
+	echo -e " Password\t: ${Green_font_prefix}${password}${Font_color_suffix}"
+	echo -e " Encrypt\t: ${Green_font_prefix}${method}${Font_color_suffix}"
+	echo -e " Protocol\t: ${Red_font_prefix}${protocol}${Font_color_suffix}"
 	echo -e " mix\t    : ${Red_font_prefix}${obfs}${Font_color_suffix}"
 	echo -e " device limit : ${Green_font_prefix}${protocol_param}${Font_color_suffix}"
 	echo -e " thread limit : ${Green_font_prefix}${speed_limit_per_con} KB/S${Font_color_suffix}"
@@ -381,7 +381,7 @@ Set_config_user(){
 Set_config_port(){
 	while true
 	do
-	echo -e "请输入要设置的用户 端口(请勿重复, 用于区分)"
+	echo -e "input user to be config port"
 	read -e -p "(默认: 2333):" ssr_port
 	[[ -z "$ssr_port" ]] && ssr_port="2333"
 	echo $((${ssr_port}+0)) &>/dev/null
@@ -398,13 +398,13 @@ Set_config_port(){
 	done
 }
 Set_config_password(){
-	echo "请输入要设置的用户 密码"
-	read -e -p "(默认: doub.io):" ssr_password
+	echo "input user to be config password"
+	read -e -p "(default: doub.io):" ssr_password
 	[[ -z "${ssr_password}" ]] && ssr_password="doub.io"
-	echo && echo ${Separator_1} && echo -e "	密码 : ${Green_font_prefix}${ssr_password}${Font_color_suffix}" && echo ${Separator_1} && echo
+	echo && echo ${Separator_1} && echo -e "	password : ${Green_font_prefix}${ssr_password}${Font_color_suffix}" && echo ${Separator_1} && echo
 }
 Set_config_method(){
-	echo -e "请选择要设置的用户 加密方式
+	echo -e "input user to be config encrypt
 	
  ${Green_font_prefix} 1.${Font_color_suffix} none
  ${Tip} 如果使用 auth_chain_* 系列协议，建议加密方式选择 none (该系列协议自带 RC4 加密)，混淆随意
@@ -1161,19 +1161,19 @@ Modify_port(){
 Modify_Config(){
 	SSR_installation_status
 	echo && echo -e "你要做什么？
- ${Green_font_prefix}1.${Font_color_suffix}  添加 用户配置
- ${Green_font_prefix}2.${Font_color_suffix}  删除 用户配置
+ ${Green_font_prefix}1.${Font_color_suffix}  add user config
+ ${Green_font_prefix}2.${Font_color_suffix}  del user config
 ————— 修改 用户配置 —————
- ${Green_font_prefix}3.${Font_color_suffix}  修改 用户密码
- ${Green_font_prefix}4.${Font_color_suffix}  修改 加密方式
- ${Green_font_prefix}5.${Font_color_suffix}  修改 协议插件
- ${Green_font_prefix}6.${Font_color_suffix}  修改 混淆插件
- ${Green_font_prefix}7.${Font_color_suffix}  修改 设备数限制
- ${Green_font_prefix}8.${Font_color_suffix}  修改 单线程限速
- ${Green_font_prefix}9.${Font_color_suffix}  修改 用户总限速
- ${Green_font_prefix}10.${Font_color_suffix} 修改 用户总流量
- ${Green_font_prefix}11.${Font_color_suffix} 修改 用户禁用端口
- ${Green_font_prefix}12.${Font_color_suffix} 修改 全部配置
+ ${Green_font_prefix}3.${Font_color_suffix}  modify password
+ ${Green_font_prefix}4.${Font_color_suffix}  modify encrypt
+ ${Green_font_prefix}5.${Font_color_suffix}  modify protocol
+ ${Green_font_prefix}6.${Font_color_suffix}  modify mix plugin
+ ${Green_font_prefix}7.${Font_color_suffix}  modify device limit
+ ${Green_font_prefix}8.${Font_color_suffix}  modify thread limit
+ ${Green_font_prefix}9.${Font_color_suffix}  modify total limit
+ ${Green_font_prefix}10.${Font_color_suffix} modify total 
+ ${Green_font_prefix}11.${Font_color_suffix} modify band port
+ ${Green_font_prefix}12.${Font_color_suffix} modify all config
 ————— 其他 —————
  ${Green_font_prefix}13.${Font_color_suffix} 修改 用户配置中显示的IP或域名
  
