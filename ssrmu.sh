@@ -282,7 +282,7 @@ ss_link_qr(){
 	SSbase64=$(urlsafe_base64 "${method}:${password}@${ip}:${port}")
 	SSurl="ss://${SSbase64}"
 	SSQRcode="http://doub.pw/qr/qr.php?text=${SSurl}"
-	ss_link=" SS    链接 : ${Green_font_prefix}${SSurl}${Font_color_suffix} \n SS  二维码 : ${Green_font_prefix}${SSQRcode}${Font_color_suffix}"
+	ss_link=" SS    HyperLink : ${Green_font_prefix}${SSurl}${Font_color_suffix} \n SS  QRCode : ${Green_font_prefix}${SSQRcode}${Font_color_suffix}"
 }
 ssr_link_qr(){
 	SSRprotocol=$(echo ${protocol} | sed 's/_compatible//g')
@@ -291,7 +291,7 @@ ssr_link_qr(){
 	SSRbase64=$(urlsafe_base64 "${ip}:${port}:${SSRprotocol}:${method}:${SSRobfs}:${SSRPWDbase64}")
 	SSRurl="ssr://${SSRbase64}"
 	SSRQRcode="http://doub.pw/qr/qr.php?text=${SSRurl}"
-	ssr_link=" SSR   链接 : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n SSR 二维码 : ${Red_font_prefix}${SSRQRcode}${Font_color_suffix} \n "
+	ssr_link=" SSR   HyperLink : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n SSR QRCode : ${Red_font_prefix}${SSRQRcode}${Font_color_suffix} \n "
 }
 ss_ssr_determine(){
 	protocol_suffix=`echo ${protocol} | awk -F "_" '{print $NF}'`
@@ -331,7 +331,7 @@ View_User(){
 	while true
 	do
 		echo -e "请输入要查看账号信息的用户 端口 please input user port"
-		read -e -p "(默认: 取消):" View_user_port
+		read -e -p "(default: cancel):" View_user_port
 		[[ -z "${View_user_port}" ]] && echo -e "已取消cancelled..." && exit 1
 		View_user=$(cat "${config_user_mudb_file}"|grep '"port": '"${View_user_port}"',')
 		if [[ ! -z ${View_user} ]]; then
@@ -365,35 +365,35 @@ View_User_info(){
 	echo -e " total : ${Green_font_prefix}${transfer_enable} ${Font_color_suffix}"
 	echo -e "${ss_link}"
 	echo -e "${ssr_link}"
-	echo -e " ${Green_font_prefix} 提示: ${Font_color_suffix}
- 在浏览器中，打开二维码链接，就可以看到二维码图片。
- 协议和混淆后面的[ _compatible ]，指的是 兼容原版协议/混淆。"
+	echo -e " ${Green_font_prefix} Hint: ${Font_color_suffix}
+ view the QR code in broswer
+ [ _compatible ] after protocol and mix means _compatible."
 	echo && echo "==================================================="
 }
 # 设置 配置信息
 Set_config_user(){
-	echo "请输入要设置的用户 用户名(请勿重复, 用于区分, 不支持中文、空格, 会报错 !)"
+	echo "Input user name请输入要设置的用户 用户名(请勿重复, 用于区分, 不支持中文、空格, 会报错 !)"
 	read -e -p "(默认: doubi):" ssr_user
 	[[ -z "${ssr_user}" ]] && ssr_user="doubi"
 	ssr_user=$(echo "${ssr_user}"|sed 's/ //g')
-	echo && echo ${Separator_1} && echo -e "	用户名 : ${Green_font_prefix}${ssr_user}${Font_color_suffix}" && echo ${Separator_1} && echo
+	echo && echo ${Separator_1} && echo -e "	user name : ${Green_font_prefix}${ssr_user}${Font_color_suffix}" && echo ${Separator_1} && echo
 }
 Set_config_port(){
 	while true
 	do
 	echo -e "input user to be config port"
-	read -e -p "(默认: 2333):" ssr_port
+	read -e -p "(default: 2333):" ssr_port
 	[[ -z "$ssr_port" ]] && ssr_port="2333"
 	echo $((${ssr_port}+0)) &>/dev/null
 	if [[ $? == 0 ]]; then
 		if [[ ${ssr_port} -ge 1 ]] && [[ ${ssr_port} -le 65535 ]]; then
-			echo && echo ${Separator_1} && echo -e "	端口 : ${Green_font_prefix}${ssr_port}${Font_color_suffix}" && echo ${Separator_1} && echo
+			echo && echo ${Separator_1} && echo -e "	port : ${Green_font_prefix}${ssr_port}${Font_color_suffix}" && echo ${Separator_1} && echo
 			break
 		else
-			echo -e "${Error} 请输入正确的数字(1-65535)"
+			echo -e "${Error} valid number(1-65535)"
 		fi
 	else
-		echo -e "${Error} 请输入正确的数字(1-65535)"
+		echo -e "${Error} valid number(1-65535)"
 	fi
 	done
 }
@@ -407,7 +407,7 @@ Set_config_method(){
 	echo -e "input user to be config encrypt
 	
  ${Green_font_prefix} 1.${Font_color_suffix} none
- ${Tip} 如果使用 auth_chain_* 系列协议，建议加密方式选择 none (该系列协议自带 RC4 加密)，混淆随意
+ ${Tip} if you use auth_chain_* protocol，please use encrypt none (该系列协议自带 RC4 加密)，混淆随意
  
  ${Green_font_prefix} 2.${Font_color_suffix} rc4
  ${Green_font_prefix} 3.${Font_color_suffix} rc4-md5
@@ -429,7 +429,7 @@ Set_config_method(){
  ${Green_font_prefix}15.${Font_color_suffix} chacha20
  ${Green_font_prefix}16.${Font_color_suffix} chacha20-ietf
  ${Tip} salsa20/chacha20-* encrypt need libsodium ，否则会无法启动ShadowsocksR !" && echo
-	read -e -p "(默认: 5. aes-128-ctr):" ssr_method
+	read -e -p "(default: 5. aes-128-ctr):" ssr_method
 	[[ -z "${ssr_method}" ]] && ssr_method="5"
 	if [[ ${ssr_method} == "1" ]]; then
 		ssr_method="none"
@@ -477,7 +477,7 @@ Set_config_protocol(){
  ${Green_font_prefix}4.${Font_color_suffix} auth_aes128_sha1
  ${Green_font_prefix}5.${Font_color_suffix} auth_chain_a
  ${Green_font_prefix}6.${Font_color_suffix} auth_chain_b
- ${Tip} 如果使用 auth_chain_* 系列协议，建议加密方式选择 none (该系列协议自带 RC4 加密)，混淆随意" && echo
+ ${Tip}  if you use auth_chain_* protocol，please use encrypt none (该系列协议自带 RC4 加密)，混淆随意" && echo
 	read -e -p "(默认: 3. auth_aes128_md5):" ssr_protocol
 	[[ -z "${ssr_protocol}" ]] && ssr_protocol="3"
 	if [[ ${ssr_protocol} == "1" ]]; then
@@ -1045,7 +1045,7 @@ debian_View_user_connection_info(){
 	format_1=$1
 	user_info=$(python mujson_mgr.py -l)
 	user_total=$(echo "${user_info}"|wc -l)
-	[[ -z ${user_info} ]] && echo -e "${Error} 没有发现 用户，请检查 !" && exit 1
+	[[ -z ${user_info} ]] && echo -e "${Error} No user, have a check!" && exit 1
 	IP_total=`netstat -anp |grep 'ESTABLISHED' |grep 'python' |grep 'tcp6' |awk '{print $5}' |awk -F ":" '{print $1}' |sort -u |grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" |wc -l`
 	user_list_all=""
 	for((integer = 1; integer <= ${user_total}; integer++))
@@ -1063,17 +1063,17 @@ debian_View_user_connection_info(){
 			fi
 		fi
 		user_info_233=$(python mujson_mgr.py -l|grep -w "${user_port}"|awk '{print $2}'|sed 's/\[//g;s/\]//g')
-		user_list_all=${user_list_all}"用户名: ${Green_font_prefix}"${user_info_233}"${Font_color_suffix}\t 端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接IP总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接IP: ${Green_font_prefix}${user_IP}${Font_color_suffix}\n"
+		user_list_all=${user_list_all}"username: ${Green_font_prefix}"${user_info_233}"${Font_color_suffix}\t port: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t IP connected: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t current connected IP: ${Green_font_prefix}${user_IP}${Font_color_suffix}\n"
 		user_IP=""
 	done
-	echo -e "用户总数: ${Green_background_prefix} "${user_total}" ${Font_color_suffix} 链接IP总数: ${Green_background_prefix} "${IP_total}" ${Font_color_suffix} "
+	echo -e "total users ${Green_background_prefix} "${user_total}" ${Font_color_suffix} total connected IP: ${Green_background_prefix} "${IP_total}" ${Font_color_suffix} "
 	echo -e "${user_list_all}"
 }
 centos_View_user_connection_info(){
 	format_1=$1
 	user_info=$(python mujson_mgr.py -l)
 	user_total=$(echo "${user_info}"|wc -l)
-	[[ -z ${user_info} ]] && echo -e "${Error} 没有发现 用户，请检查 !" && exit 1
+	[[ -z ${user_info} ]] && echo -e "${Error} No user, have a check !" && exit 1
 	IP_total=`netstat -anp |grep 'ESTABLISHED' |grep 'python' |grep 'tcp' | grep '::ffff:' |awk '{print $5}' |awk -F ":" '{print $4}' |sort -u |grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" |wc -l`
 	user_list_all=""
 	for((integer = 1; integer <= ${user_total}; integer++))
@@ -1091,26 +1091,26 @@ centos_View_user_connection_info(){
 			fi
 		fi
 		user_info_233=$(python mujson_mgr.py -l|grep -w "${user_port}"|awk '{print $2}'|sed 's/\[//g;s/\]//g')
-		user_list_all=${user_list_all}"用户名: ${Green_font_prefix}"${user_info_233}"${Font_color_suffix}\t 端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接IP总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接IP: ${Green_font_prefix}${user_IP}${Font_color_suffix}\n"
+		user_list_all=${user_list_all}"username: ${Green_font_prefix}"${user_info_233}"${Font_color_suffix}\t port: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t IP connected: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t current connected IP: ${Green_font_prefix}${user_IP}${Font_color_suffix}\n"
 		user_IP=""
 	done
-	echo -e "用户总数: ${Green_background_prefix} "${user_total}" ${Font_color_suffix} 链接IP总数: ${Green_background_prefix} "${IP_total}" ${Font_color_suffix} "
+	echo -e "total users: ${Green_background_prefix} "${user_total}" ${Font_color_suffix} total connected IP: ${Green_background_prefix} "${IP_total}" ${Font_color_suffix} "
 	echo -e "${user_list_all}"
 }
 View_user_connection_info(){
 	SSR_installation_status
-	echo && echo -e "请选择要显示的格式：
- ${Green_font_prefix}1.${Font_color_suffix} 显示 IP 格式
- ${Green_font_prefix}2.${Font_color_suffix} 显示 IP+IP归属地 格式" && echo
+	echo && echo -e "Choose format
+ ${Green_font_prefix}1.${Font_color_suffix} show IP 格式
+ ${Green_font_prefix}2.${Font_color_suffix} show IP+IP GEO 格式" && echo
 	read -e -p "(默认: 1):" ssr_connection_info
 	[[ -z "${ssr_connection_info}" ]] && ssr_connection_info="1"
 	if [[ ${ssr_connection_info} == "1" ]]; then
 		View_user_connection_info_1 ""
 	elif [[ ${ssr_connection_info} == "2" ]]; then
-		echo -e "${Tip} 检测IP归属地(ipip.net)，如果IP较多，可能时间会比较长..."
+		echo -e "${Tip} Checking IP address(ipip.net)，如果IP较多，可能时间会比较长..."
 		View_user_connection_info_1 "IP_address"
 	else
-		echo -e "${Error} 请输入正确的数字(1-2)" && exit 1
+		echo -e "${Error} choose(1-2)" && exit 1
 	fi
 }
 View_user_connection_info_1(){
@@ -1310,8 +1310,8 @@ Del_port_user(){
 Manually_Modify_Config(){
 	SSR_installation_status
 	vi ${config_user_mudb_file}
-	echo "是否现在重启ShadowsocksR？[Y/n]" && echo
-	read -e -p "(默认: y):" yn
+	echo "restart ShadowsocksR？[Y/n]" && echo
+	read -e -p "(default: y):" yn
 	[[ -z ${yn} ]] && yn="y"
 	if [[ ${yn} == [Yy] ]]; then
 		Restart_SSR
